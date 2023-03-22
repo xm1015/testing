@@ -232,13 +232,25 @@ fs: $(UPROGS)
 	@sudo umount $(dst)
 
 # Write mounted sdcard
-sdcard: userprogs
-	@if [ ! -d "$(dst)/bin" ]; then sudo mkdir $(dst)/bin; fi
-	@for file in $$( ls $U/_* ); do \
-		sudo cp $$file $(dst)/bin/$${file#$U/_}; done
-	@sudo cp $U/_init $(dst)/init
-	@sudo cp $U/_sh $(dst)/sh
-	@sudo cp README $(dst)/README
+# sdcard: userprogs
+# 	@if [ ! -d "$(dst)/bin" ]; then sudo mkdir $(dst)/bin; fi
+# 	@for file in $$( ls $U/_* ); do \
+# 		sudo cp $$file $(dst)/bin/$${file#$U/_}; done
+# 	@sudo cp $U/_init $(dst)/init
+# 	@sudo cp $U/_sh $(dst)/sh
+# 	@sudo cp README $(dst)/README
+
+
+
+# 运行方式：
+# 1）格式化SD卡。SD卡连接电脑后，先将其umount，然后利用mkfs命令进行格式化
+# 2）将img文件写入。使用dd命令写入img文件。
+# 3）直接拔出SD卡即可。
+SD=/dev/sdb
+sdcard: fs
+	@echo "falshing into sdcard ..."
+	@echo $(SD)
+	@sudo dd if=fs.img of=$(SD)
 
 clean: 
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
